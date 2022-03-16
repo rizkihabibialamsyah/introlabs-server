@@ -18,8 +18,10 @@ Software :
 	sudo apt install python pip node npm ffmpeg 
 	
 ## Instalasi Modul Python
+
 	pip install picamera ws4py
 
 ## Instalasi Modul Node JS
+
 	cd server
 	npm install
