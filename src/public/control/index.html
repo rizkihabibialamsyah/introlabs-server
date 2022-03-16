@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Introlabs - Control Mode</title>
+  <link rel="icon" type="image/x-icon" href="/logo.png">
+  <link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/common/style.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-dark" style="background-color: #0a0b5d;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/logo.png" alt="" width="30" height="30" class="d-inline-block align-text-top">
+        Introlabs
+      </a>
+      <div class="d-flex">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Control Mode</a>
+        <button onclick="window.location.href='/logout'" class="btn btn-sm btn-outline-secondary" type="button" style="color: #ffffff;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+	<div class="container-fluid">
+		<div class="row">
+      <div class="col-lg-6 mt-3 mb-2">
+        <div class="row h-100 border border-primary ms-3 me-1">
+          <div class="col-lg ms-5">
+            <div class="row h-100 align-items-center justify-content-start">
+              <svg class="bi" width="50" height="50" fill="currentColor" onclick="post('/control/cam', 'camera=-5')">
+                <use xlink:href="/node_modules/bootstrap-icons/bootstrap-icons.svg#caret-left-fill"/>
+              </svg>
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="text-center">
+              <div class="badge bg-primary text-wrap fs-6 mt-3 mb-2" style="width: 6rem;">Camera</div>
+      				<canvas id="videoCanvas" width="640" height="480" class="mb-2">
+      				<p>
+      					Please use a browser that supports the Canvas Element, like
+      					<a href="http://www.google.com/chrome">Chrome</a>,
+      					<a href="http://www.mozilla.com/firefox/">Firefox</a>,
+      					<a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+      				</p>
+      				</canvas>
+              <div class="row-lg">
+                <button type="button" class="btn btn-primary custom mb-3" onclick="post('/control/cam', 'camera=-30')">-30&deg</button>
+                <button type="button" class="btn btn-primary custom mb-3" onclick="post('/control/cam', 'camera=center')">Center</button>
+                <button type="button" class="btn btn-primary custom mb-3" onclick="post('/control/cam', 'camera=30')">+30&deg</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg me-5">
+            <div class="row h-100 align-items-center justify-content-start">
+              <svg class="bi" width="50" height="50" fill="currentColor" onclick="post('/control/cam', 'camera=5')">
+                <use xlink:href="/node_modules/bootstrap-icons/bootstrap-icons.svg#caret-right-fill"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mt-3 mb-2">
+        <div class="row h-100 border border-primary ms-1 me-3">
+          <div class="text-center">
+            <div class="badge bg-primary text-wrap fs-6 mt-3 mb-1" style="width: 6rem;">Graph</div>
+          </div>
+          <div class="row h-100">
+            <div class="col-lg-9">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-speed-tab" data-bs-toggle="tab" data-bs-target="#nav-speed" type="button" role="tab" aria-controls="nav-speed" aria-selected="true">Speed</button>
+                  <button class="nav-link" id="nav-temp-tab" data-bs-toggle="tab" data-bs-target="#nav-temp" type="button" role="tab" aria-controls="nav-temp" aria-selected="false">Temperature</button>
+                  <button class="nav-link" id="nav-press-tab" data-bs-toggle="tab" data-bs-target="#nav-press" type="button" role="tab" aria-controls="nav-press" aria-selected="false">Pressure</button>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-speed" role="tabpanel" aria-labelledby="nav-speed-tab"><svg width="640" height="500"></svg></div>
+                <div class="tab-pane fade" id="nav-temp" role="tabpanel" aria-labelledby="nav-temp-tab"><svg width="640" height="500"></svg></div>
+                <div class="tab-pane fade" id="nav-press" role="tabpanel" aria-labelledby="nav-press-tab"><svg width="640" height="500"></svg></div>
+              </div>
+            </div>
+          <div class="col">
+            <br/><br/>
+            <div class="row h-25 align-items-end">
+              <div class="text-center">
+                <div class="badge bg-primary text-wrap">Speed</div>
+                <div class="text primary fs-1">0</div>
+                <div class="text-primary fs-5">RPM</div>
+              </div>
+            </div>
+            <div class="row h-25 align-items-end">
+              <div class="text-center">
+                <div class="badge bg-primary text-wrap">Temperature</div>
+                <div class="text primary fs-1">0</div>
+                <div class="text-primary fs-5">&deg</div>
+              </div>
+            </div>
+            <div class="row h-25 align-items-end">
+              <div class="text-center">
+                <div class="badge bg-primary text-wrap">Pressure</div>
+                <div class="text primary fs-1">0</div>
+                <div class="text-primary fs-5">Bar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+			 </div>
+      </div>
+		</div>
+
+		<div class="row mt-2 ms-2 me-2">
+      <div class="text-center">
+        <div class="badge bg-primary text-wrap fs-6 mt-3 mb-2" style="width: 12rem;">Control Panel</div>
+      </div>
+      <form id="form" action="/control/data" method="post">
+        <div class="accordion" id="myAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne">Motor</button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+              <div class="card-body">
+                <p>Speed Sequence</p>
+                <div class="form-group row mb-4">
+            			<div class="form-group col-md-6">
+              			<input type="number" min="0" max="500" class="form-control text-center" name="r" placeholder="Speed 1">
+              			<input type="number" min="0" max="500" class="form-control text-center" name="r" placeholder="Speed 2">
+              			<input type="number" min="0" max="500" class="form-control text-center" name="r" placeholder="Speed 3">
+              			<input type="number" min="0" max="500" class="form-control text-center" name="r" placeholder="Speed 4">
+              			<input type="number" min="0" max="500" class="form-control text-center" name="r" placeholder="Speed 5">
+            			</div>
+            			<div class="form-group col-md-6">
+              			<input type="number" min="0" class="form-control text-center" name="rD" placeholder="Duration 1">
+              			<input type="number" min="0" class="form-control text-center" name="rD" placeholder="Duration 2">
+              			<input type="number" min="0" class="form-control text-center" name="rD" placeholder="Duration 3">
+              			<input type="number" min="0" class="form-control text-center" name="rD" placeholder="Duration 4">
+              			<input type="number" min="0" class="form-control text-center" name="rD" placeholder="Duration 5">
+            			</div>
+          			</div>
+                <p>PID Constant</p>
+                <div class="form-group row">
+                  <div class="form-group col-md-4"><input type="number" min="0" class="form-control text-center" name="k" placeholder="Kp"></div>
+                  <div class="form-group col-md-4"><input type="number" min="0" class="form-control text-center" name="k" placeholder="Ki"></div>
+                  <div class="form-group col-md-4"><input type="number" min="0" class="form-control text-center" name="k" placeholder="Kd"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo">Heater</button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+              <div class="card-body">
+                <p>Temperature Sequence</p>
+                <div class="form-group row mb-4">
+                  <div class="form-group col-md-6">
+                    <input type="number" min="20" max="100" class="form-control text-center" name="t" placeholder="Temperature 1">
+                    <input type="number" min="20" max="100" class="form-control text-center" name="t" placeholder="Temperature 2">
+                    <input type="number" min="20" max="100" class="form-control text-center" name="t" placeholder="Temperature 3">
+                    <input type="number" min="20" max="100" class="form-control text-center" name="t" placeholder="Temperature 4">
+                    <input type="number" min="20" max="100" class="form-control text-center" name="t" placeholder="Temperature 5">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input type="number" min="0" class="form-control text-center" name="tD" placeholder="Duration 1">
+                    <input type="number" min="0" class="form-control text-center" name="tD" placeholder="Duration 2">
+                    <input type="number" min="0" class="form-control text-center" name="tD" placeholder="Duration 3">
+                    <input type="number" min="0" class="form-control text-center" name="tD" placeholder="Duration 4">
+                    <input type="number" min="0" class="form-control text-center" name="tD" placeholder="Duration 5">
+                  </div>
+                </div>
+                <p>Bang-bang Offset</p>
+                <div class="form-group row">
+                  <div class="form-group col-md-6"><input type="number" min="0" class="form-control text-center" name="o" placeholder="Offset"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree">Pneumatic</button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+              <div class="card-body">
+                <p>Pneumatic Sequence</p>
+                <div class="form-group row">
+                  <div class="form-group col-md-12">
+                    <div class="text-center mb-3">
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="a1" type="checkbox" id="flexSwitchCheckChecked" data-toggle="toggle" data="1" data-on="Enabled" data-off="Disabled">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">A</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="b1" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">B</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="c1" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">C</label>
+                      </div>
+                      <input type="number" class="form-control text-center" name="pD" min="0" placeholder="Duration 1">
+                    </div>
+                    <div class="text-center mb-3">
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="a2" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">A</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="b2" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">B</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="c2" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">C</label>
+                      </div>
+                      <input type="number" class="form-control text-center" name="pD" min="0" placeholder="Duration 2">
+                    </div>
+                    <div class="text-center mb-3">
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="a3" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">A</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="b3" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">B</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="c3" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">C</label>
+                      </div>
+                      <input type="number" class="form-control text-center" name="pD" min="0" placeholder="Duration 3">
+                    </div>
+                    <div class="text-center mb-3">
+                        <div class="form-switch form-check-inline">
+                          <input class="form-check-input" name="a4" type="checkbox" id="flexSwitchCheckChecked">
+                          <label class="form-check-label" for="flexSwitchCheckChecked">A</label>
+                        </div>
+                        <div class="form-switch form-check-inline">
+                          <input class="form-check-input" name="b4" type="checkbox" id="flexSwitchCheckChecked">
+                          <label class="form-check-label" for="flexSwitchCheckChecked">B</label>
+                        </div>
+                        <div class="form-switch form-check-inline">
+                          <input class="form-check-input" name="c4" type="checkbox" id="flexSwitchCheckChecked">
+                          <label class="form-check-label" for="flexSwitchCheckChecked">C</label>
+                        </div>
+                        <input type="number" class="form-control text-center" name="pD" min="0" placeholder="Duration 4">
+                    </div>
+                    <div class="text-center mb-3">
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="a5" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">A</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="b5" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">B</label>
+                      </div>
+                      <div class="form-switch form-check-inline">
+                        <input class="form-check-input" name="c5" type="checkbox" id="flexSwitchCheckChecked">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">C</label>
+                      </div>
+                      <input type="number" class="form-control text-center" name="pD" min="0" placeholder="Duration 5">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-10 mt-1">
+            <button type="submit" class="btn form-control btn-primary fw-bold">Run</button><!-- onclick="post('/control/data', $('#form').serialize().toString())"-->
+          </div>
+          <div class="col-lg-2 mt-1">
+            <button type="reset" class="btn form-control btn-danger fw-bold">Reset</button>
+          </div>
+        </div>
+      </form>
+		</div>
+
+	</div>
+
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/node_modules/d3/dist/d3.js"></script>
+
+  <script src="/common/js/websocket.js"></script>
+  <script src="/common/js/graph.js"></script>
+  <script src="/common/js/fetch.js"></script>
+  <script src="/common/js/jsmpg.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Introlabs - Login</title>
+  <link rel="icon" type="image/x-icon" href="/logo.png">
+  <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/login/style.css">
+</head>
+
+<body>
+  <section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container-fluid h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-12 h-100">
+          <div class="card rounded-3 text-black h-100">
+            <div class="row g-0 h-100">
+              <div class="col-lg-9 d-flex align-items-center gradient-custom-2">
+                <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                  <img src="/logo.png" style="width: 185px;" alt="logo">
+                  <h2 class="mb-4">Introlabs</h2>
+                  <p class="big mb-0">Industrial Electronics Remote Laboratory System</p>
+                </div>
+              </div>
+              <div class="col-lg-3 d-flex align-items-center">
+                <div class="card-body p-md-5 mx-md-4">
+
+                  <div class="text-center">
+
+                    <h4 class="mt-1 mb-5 pb-1">Login Page</h4>
+                  </div>
+
+                  <form action="/login" method="post">
+
+                    <div class="form-outline mb-4">
+                      <input type="username" id="form2Example11" name="username" class="form-control" placeholder="Username"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <input type="password" id="form2Example22" name="password" class="form-control" placeholder="Password" />
+                    </div>
+
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Log in</button>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                      <p class="mb-0 me-2">Need help?</p>
+                      <button type="button" class="btn btn-outline-primary">Contact administrator</button>
+                    </div>
+
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>

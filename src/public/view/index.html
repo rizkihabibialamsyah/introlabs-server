@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Introlabs - View Mode</title>
+  <link rel="icon" type="image/x-icon" href="/logo.png">
+  <link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/common/style.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-dark" style="background-color: #0a0b5d;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/logo.png" alt="" width="30" height="30" class="d-inline-block align-text-top">
+        Introlabs
+      </a>
+      <div class="d-flex">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">View Mode</a>
+        <button onclick="window.location.href='/logout'" class="btn btn-sm btn-outline-secondary" type="button" style="color: #ffffff;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+	<div class="container-fluid">
+		<div class="row">
+      <div class="col-lg-6 mt-3 mb-2">
+        <div class="row h-100 border border-primary ms-3 me-1">
+          <div class="col-lg ms-5">
+            <div class="row h-100 align-items-center justify-content-start">
+            </div>
+          </div>
+          <div class="col-lg-9">
+            <div class="text-center">
+              <div class="badge bg-primary text-wrap fs-6 mt-3 mb-4" style="width: 6rem;">Camera</div>
+      				<canvas id="videoCanvas" width="640" height="480" class="mb-2">
+        				<p>
+        					Please use a browser that supports the Canvas Element, like
+        					<a href="http://www.google.com/chrome">Chrome</a>,
+        					<a href="http://www.mozilla.com/firefox/">Firefox</a>,
+        					<a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+        				</p>
+      				</canvas>
+              <div class="row-lg"></div>
+            </div>
+          </div>
+          <div class="col-lg me-5">
+            <div class="row h-100 align-items-center justify-content-start">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mt-3 mb-2">
+        <div class="row h-100 border border-primary ms-1 me-3">
+          <div class="text-center">
+            <div class="badge bg-primary text-wrap fs-6 mt-3 mb-1" style="width: 6rem;">Graph</div>
+          </div>
+          <div class="row h-100">
+            <div class="col-lg-9">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-speed-tab" data-bs-toggle="tab" data-bs-target="#nav-speed" type="button" role="tab" aria-controls="nav-speed" aria-selected="true">Speed</button>
+                  <button class="nav-link" id="nav-temp-tab" data-bs-toggle="tab" data-bs-target="#nav-temp" type="button" role="tab" aria-controls="nav-temp" aria-selected="false">Temperature</button>
+                  <button class="nav-link" id="nav-press-tab" data-bs-toggle="tab" data-bs-target="#nav-press" type="button" role="tab" aria-controls="nav-press" aria-selected="false">Pressure</button>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-speed" role="tabpanel" aria-labelledby="nav-speed-tab"><svg width="640" height="500"></svg></div>
+                <div class="tab-pane fade" id="nav-temp" role="tabpanel" aria-labelledby="nav-temp-tab"><svg width="640" height="500"></svg></div>
+                <div class="tab-pane fade" id="nav-press" role="tabpanel" aria-labelledby="nav-press-tab"><svg width="640" height="500"></svg></div>
+              </div>
+            </div>
+            <div class="col">
+              <br/><br/>
+              <div class="row h-25 align-items-end">
+                <div class="text-center">
+                  <div class="badge bg-primary text-wrap">Speed</div>
+                  <div class="text primary fs-1">0</div>
+                  <div class="text-primary fs-5">RPM</div>
+                </div>
+              </div>
+              <div class="row h-25 align-items-end">
+                <div class="text-center">
+                  <div class="badge bg-primary text-wrap">Temperature</div>
+                  <div class="text primary fs-1">0</div>
+                  <div class="text-primary fs-5">&deg</div>
+                </div>
+              </div>
+              <div class="row h-25 align-items-end">
+                <div class="text-center">
+                  <div class="badge bg-primary text-wrap">Pressure</div>
+                  <div class="text primary fs-1">0</div>
+                  <div class="text-primary fs-5">Bar</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/node_modules/d3/dist/d3.js"></script>
+
+  <script src="/common/js/websocket.js"></script>
+  <script src="/common/js/graph.js"></script>
+  <script src="/common/js/jsmpg.js"></script>
+
+</body>
+
+</html>
