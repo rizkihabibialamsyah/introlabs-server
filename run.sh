@@ -51,6 +51,8 @@ while [ "$usercommand" != "exit" ]; do
 		cd server
 		node . &>/dev/null &
 		cd ..
+	elif [ "$usercommand" == "exit" ]; then
+		
 	else
 		echo "Invalid command!"
 	fi
