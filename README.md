@@ -9,8 +9,8 @@ Hardware :
 * Raspberry Pi camera v1.3/v2
 
 Software :
-* Python + PIP
-* Node JS + NPM
+* Python + pip
+* Node JS + npm
 * FFMPEG
 
 ## Instalasi Software yang Dibutuhkan 
