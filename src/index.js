@@ -95,24 +95,23 @@ app.post('/login', async (req, res) => {
           const passwordMatch = await bcrypt.compare(submittedPass, storedPass);
           if (passwordMatch) {
               let usrname = foundUser.username;
-
-							if (foundUser.type == 'control' && controlUserCount < 1) {
-									controlUserCount++;
-									req.session.user = foundUser; //set cookie session
-									if(req.session.prevUrl) res.redirect(req.session.prevUrl);
-									res.redirect('/control');
-									console.log(foundUser.username + " logged in");
-							}
-							else if (foundUser.type == 'view' && controlUserCount < 4){
-								viewUserCount++;
-								req.session.user = foundUser; //set cookie session
-								if(req.session.prevUrl) res.redirect(req.session.prevUrl);
-								res.redirect('/view');
-							console.log(foundUser.username + " logged in");
-							}
-							else {
-								res.send("<div align ='center'><h2>Maximum user reached</h2></div>");
-							}
+		if (foundUser.type == 'control' && controlUserCount < 1) {
+				controlUserCount++;
+				req.session.user = foundUser; //set cookie session
+				if(req.session.prevUrl) res.redirect(req.session.prevUrl);
+				res.redirect('/control');
+				console.log(foundUser.username + " logged in");
+		}
+		else if (foundUser.type == 'view' && controlUserCount < 4){
+			viewUserCount++;
+			req.session.user = foundUser; //set cookie session
+			if(req.session.prevUrl) res.redirect(req.session.prevUrl);
+			res.redirect('/view');
+		console.log(foundUser.username + " logged in");
+		}
+		else {
+			res.send("<div align ='center'><h2>Maximum user reached</h2></div>");
+		}
           } else {
               res.send("<div align ='center'><h2>Invalid username or password</h2></div><br><br><div align ='center'><a href='/login'>Back to login page</a></div>");
           }
