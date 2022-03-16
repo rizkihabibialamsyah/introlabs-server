@@ -25,6 +25,7 @@ Software :
 
 	cd server
 	npm install
+	cd ..
 
 ## Menjalankan server
 	./run.sh
