@@ -9,13 +9,13 @@ Hardware :
 * Raspberry Pi camera v1.3/v2
 
 Software :
-* Python + pip
+* Python 3 + pip
 * Node JS + npm
 * FFMPEG
 
 ## Instalasi Software yang Dibutuhkan 
 
-	sudo apt install python pip node npm ffmpeg 
+	sudo apt install python3 python3-pip node npm ffmpeg 
 	
 ## Instalasi Modul Python
 
