@@ -27,5 +27,10 @@ Software :
 	npm install
 	cd ..
 
+## Berikan permission executable untuk file run.sh
+	
+	chmod +x run.sh
+	
 ## Menjalankan server
+
 	./run.sh
