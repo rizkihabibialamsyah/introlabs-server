@@ -17,7 +17,7 @@
     "express-session": "^1.17.2",
     "jquery": "^3.6.0",
     "prompt": "^1.2.2",
-    "serialport": "^10.0.4",
+    "serialport": "^10.4.0",
     "ws": "^8.5.0"
   }
 }
