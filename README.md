@@ -15,7 +15,7 @@ Software :
 
 ## Instalasi Software yang Dibutuhkan 
 
-	sudo apt install python3 python3-pip node npm ffmpeg 
+	sudo apt install python3 python3-pip nodejs npm ffmpeg 
 	
 ## Instalasi Modul Python
 
