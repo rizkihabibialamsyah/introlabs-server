@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "==Introlabs Server==
+
 Available commands :
 start		: start the server
 stop		: stop the server
