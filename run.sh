@@ -16,9 +16,9 @@ exit		: exit
 while [ "$usercommand" != "exit" ]; do
 	read -p "Command: "  usercommand
 	if [ "$usercommand" == "start" ]; then
-		python /server/camera/cam-server.py &>/dev/null &
+		python src/camera/cam-server.py &>/dev/null &
 		sleep 3
-		cd server
+		cd src
 		node . &>/dev/null &
 		cd ..
 	elif [ "$usercommand" == "stop" ]; then
@@ -30,29 +30,29 @@ while [ "$usercommand" != "exit" ]; do
 		curl ifconfig.me
 		echo
 	elif [ "$usercommand" == "listuser" ]; then
-		cd server/admin
+		cd src/admin
 		node listuser.js
 		cd ../..
 	elif [ "$usercommand" == "adduser" ]; then
-		cd server/admin
+		cd src/admin
 		node adduser.js
 		cd ../..
 	elif [ "$usercommand" == "deleteuser" ]; then
-		cd server/admin
+		cd src/admin
 		node deleteuser.js
 		cd ../..
 	elif [ "$usercommand" == "reset" ]; then
 		pkill python
 		pkill node
-		cp server/admin/default.json server/admin/users.json
+		cp src/admin/default.json src/admin/users.json
 		echo "Reset successful!"
-		python server/camera/cam-server.py &>/dev/null &
+		python src/camera/cam-server.py &>/dev/null &
 		sleep 3
-		cd server
+		cd src
 		node . &>/dev/null &
 		cd ..
 	elif [ "$usercommand" == "exit" ]; then
-		
+		echo	
 	else
 		echo "Invalid command!"
 	fi
