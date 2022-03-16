@@ -23,7 +23,7 @@ Software :
 
 ## Instalasi Modul Node JS
 
-	cd server
+	cd src
 	npm install
 	cd ..
 
