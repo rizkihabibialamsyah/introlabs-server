@@ -164,15 +164,15 @@ app.post('/control/data', requireLogin, (req, res) => {
 	if (req.body.k[0] === '')
 		order.k = 1;
 	else
-		order.k = parseInt(req.body.k[0]);
+		order.k = parseFloat(req.body.k[0]);
 	if (req.body.k[1] === '')
 		order.i = 0
 	else
-		order.i = parseInt(req.body.k[1]);
+		order.i = parseFloat(req.body.k[1]);
 	if (req.body.k[2] === '')
 		order.d = 0;
 	else
-		order.d = parseInt(req.body.k[2]);
+		order.d = parseFloat(req.body.k[2]);
 	if (req.body.o === '')
 		order.o = 3;
 	else
