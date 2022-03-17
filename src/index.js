@@ -42,7 +42,7 @@ let order = {
 	a:0,	// pneumatic A
 	b:0,	// pneumatic B
 	c:0,	// pneumatic C
-	k:1,	// kp
+	k:0.00001,	// kp
 	i:0,	// ki
 	d:0,	// kd
 	o:3,	// offset bang-bang
