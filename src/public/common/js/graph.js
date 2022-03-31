@@ -24,7 +24,7 @@ var xS = d3.scaleLinear()
     .range([0, widthS]);
 
 var yS = d3.scaleLinear()
-    .domain([0, 500])
+    .domain([0, 1000])
     .range([heightS, 0]);
 
 var lineS = d3.line()
