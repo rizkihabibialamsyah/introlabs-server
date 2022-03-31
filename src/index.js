@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const WebSocket = require('ws');
+
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 
@@ -49,7 +50,18 @@ let order = {
 	s:90	// servo position
 };
 
-let rTimeoutID, tTimeoutID, pTimeoutID;
+// ID untuk sequence
+let intervalID = {
+	r:undefined, 
+	t:undefined, 
+	p:undefined
+};
+
+let timeoutID = {
+	r:undefined, 
+	t:undefined, 
+	p:undefined
+};
 
 // Baca database user dan password
 fs.readFile('./admin/users.json', 'utf8', (err, jsonString) => {
@@ -156,104 +168,72 @@ app.post('/control/data', requireLogin, (req, res) => {
 	res.sendStatus(204);
 
 	// Clear sequence lama
-	clearTimeout(rTimeoutID);
-	clearTimeout(tTimeoutID);
-	clearTimeout(pTimeoutID);
+	for (let i in intervalID) {
+		clearInterval(intervalID[i]);
+		clearTimeout(timeoutID[i]);
+	}
+
+	// Fungsi untuk set masing-masing variabel
+	function setVal(value, ID) {
+		if (ID === 'p') {
+			order.a = value[0] == 'on' ? 1 : 0;
+			order.b = value[1] == 'on' ? 1 : 0;
+			order.c = value[2] == 'on' ? 1 : 0;
+		}
+		else {
+			if (value === '')
+				order[ID] = 0;
+			else {
+				order[ID] = parseFloat(value);
+			}
+		}
+	}
 
 	// Set konstanta PID dan offset bang-bang
-	if (req.body.k[0] === '')
-		order.k = 1;
-	else
-		order.k = parseFloat(req.body.k[0]);
-	if (req.body.k[1] === '')
-		order.i = 0
-	else
-		order.i = parseFloat(req.body.k[1]);
-	if (req.body.k[2] === '')
-		order.d = 0;
-	else
-		order.d = parseFloat(req.body.k[2]);
-	if (req.body.o === '')
-		order.o = 3;
-	else
-		order.o = parseInt(req.body.o);
-
-	function setR(value) {
-		if (value === '')
-			order.r = 0;
-		else {
-			order.r = parseInt(value);
-		}
+	setVal(req.body.k[0], 'k');
+	setVal(req.body.k[1], 'i');
+	setVal(req.body.k[2], 'd');
+	setVal(req.body.o, 'o');
+		
+	// Fungsi untuk mengatur sequence
+	function setSequence(value, duration, ID) {
+		setVal(value[0], ID);
+		timeoutID[ID] = setTimeout(() => {
+			setVal(value[1], ID);
+			timeoutID[ID] = setTimeout(() => {
+				setVal(value[2], ID);
+				timeoutID[ID] = setTimeout(() => {
+					setVal(value[3], ID);
+					timeoutID[ID] = setTimeout(() => {
+						setVal(value[4], ID);
+					}, 1000 * duration[3]);
+				}, 1000 * duration[2]);
+			}, 1000 * duration[1]);
+		}, 1000 * duration[0]);
+	}
+	
+	// Fungsi untuk menjumlahkan input (karena dalam string)
+	function sumString(duration) {
+		let sum = 0
+		for (let i of duration)
+			sum += parseInt(i);
+		return sum;
 	}
 
-	function setT(value) {
-		if (value === '')
-			order.t = 0;
-		else {
-			order.t = parseInt(value);
-		}
+	// Fungsi untuk menjalankan sequence berulan-ulang
+	function runSequence(value, duration, ID) {
+		setSequence(value, duration, ID);
+		intervalID[ID] = setInterval(() => {
+			setSequence(value, duration, ID);
+		}, 1000 * sumString(duration));
 	}
-
-	function setP(a, b, c) {
-		order.a = a == 'on' ? 1 : 0;
-		order.b = b == 'on' ? 1 : 0;
-		order.c = c == 'on' ? 1 : 0;
-	}
-
-	// Set kecepatan, suhu, dan pneumatik awal
-	setR(req.body.r[0]);
-	setT(req.body.t[0]);
-	setP(req.body.a1, req.body.b1, req.body.c1);
-
-	// Buat sequence
-	rTimeoutID = setTimeout(() => {
-		setR(req.body.r[1]);
-		rTimeoutID = setTimeout(() => {
-			setR(req.body.r[2]);
-			rTimeoutID = setTimeout(() => {
-				setR(req.body.r[3]);
-				rTimeoutID = setTimeout(() => {
-					setR(req.body.r[4]);
-					rTimeoutID = setTimeout(() => {
-						setR(0);
-					}, 1000 * req.body.rD[4]);
-				}, 1000 * req.body.rD[3]);
-			}, 1000 * req.body.rD[2]);
-		}, 1000 * req.body.rD[1]);
-	}, 1000 * req.body.rD[0]);
-
-	tTimeoutID = setTimeout(() => {
-		setT(req.body.t[1]);
-		tTimeoutID = setTimeout(() => {
-			setT(req.body.t[2]);
-			tTimeoutID = setTimeout(() => {
-				setT(req.body.t[3]);
-				tTimeoutID = setTimeout(() => {
-					setT(req.body.t[4]);
-					tTimeoutID = setTimeout(() => {
-						setT(0);
-					}, 1000 * req.body.tD[4]);
-				}, 1000 * req.body.tD[3]);
-			}, 1000 * req.body.tD[2]);
-		}, 1000 * req.body.tD[1]);
-	}, 1000 * req.body.tD[0]);
-
-	pTimeoutID = setTimeout(() => {
-		setP(req.body.a2, req.body.b2, req.body.c2);
-		pTimeoutID = setTimeout(() => {
-			setP(req.body.a3, req.body.b3, req.body.c3);
-			pTimeoutID = setTimeout(() => {
-				setP(req.body.a4, req.body.b4, req.body.c4);
-				pTimeoutID = setTimeout(() => {
-					setP(req.body.a5, req.body.b5, req.body.c5);
-					pTimeoutID = setTimeout(() => {
-						setP(0, 0, 0);
-					}, 1000 * req.body.pD[4]);
-				}, 1000 * req.body.pD[3]);
-			}, 1000 * req.body.pD[2]);
-		}, 1000 * req.body.pD[1]);
-	}, 1000 * req.body.pD[0]);
-
+	
+	let pVal = [[req.body.a1, req.body.b1, req.body.c1], [req.body.a2, req.body.b2, req.body.c2], [req.body.a3, req.body.b3, req.body.c3], [req.body.a4, req.body.b4, req.body.c4], [req.body.a5, req.body.b5, req.body.c5]];
+	
+	// Jalankan sequence
+	runSequence(req.body.r, req.body.rD, 'r');
+	runSequence(req.body.t, req.body.tD, 't');
+	runSequence(pVal, req.body.pD, 'p');
 });
 
 // Menerima perintah kontrol kamera dari browser
@@ -305,9 +285,7 @@ wss.on('connection', function connection(ws) {
 	setInterval(sendData, 1000);
 });
 
-
 // Bagian komunikasi serial
-
 //Parse JSON dan Error Checking
 function tryParseJSONObject (jsonString){
     try {
@@ -325,7 +303,6 @@ function tryParseJSONObject (jsonString){
 
     return false;
 };
-
 
 //Initiate Parser, Read Serial
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
@@ -357,3 +334,4 @@ parser.on('data', function (data) {
 //Console.log buat status sama debugging
 //Clearing CMD
 //process.stdout.write('\033c');
+
